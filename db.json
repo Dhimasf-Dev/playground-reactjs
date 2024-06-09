@@ -1,0 +1,6 @@
+{
+  "dataUser": [
+    { "id": 1, "name": "Hello World", "email": "user@gmail.com", "password": "Admin!" }
+  ]
+}
+  
