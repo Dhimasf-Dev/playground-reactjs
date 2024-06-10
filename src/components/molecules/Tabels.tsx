@@ -1,18 +1,23 @@
-// import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@reduxjs/toolkit/query';
+import { UseDispatch } from 'react-redux';
+import { setDataUser } from '../../redux/reducers/userReducer';
 
 const Tabels = () => {
-    // const [data, setData] = useState([])
+    const data = useSelector((state: any) => state.user.userData);
+    const dispatch = useDispatch();
 
-    // const getData = async () => {
-    //     const res = await axios.get('http://localhost:3000/dataUser')
-    //     setData(res.data)
-    //     console.log(res.data)
-    // }
+    const getData = async () => {
+        const res = await axios.get('http://localhost:5000/dataUser')
+        dispatch(setDataUser(res.data))
+        console.log(res.data)
+    }
 
-    // useEffect(() => {
-    //     getData()
-    // },[])
+    useEffect(() => {
+        getData()
+    },[])
 
     return (
         <table className=''>
@@ -24,11 +29,15 @@ const Tabels = () => {
                 </tr>
             </thead>
             <tbody>
-            <tr className='odd:bg-[#66D9EF]'>
-                <td className='py-3 px-10'>John Doedasdasda dasdasdas</td>
-                <td  className='py-3 px-10'>30asdasda sdsa</td>
-                <td  className='py-3 px-10'>New Yorkasdsa dasdsadas</td>
-            </tr> 
+            {
+                data.map((item: any) => (
+                    <tr className='odd:bg-[#66D9EF]'>
+                        <td className='py-3 px-10'>{item.name}</td>
+                        <td  className='py-3 px-10'>{item.email}</td>
+                        <td  className='py-3 px-10'>{item.password}</td>
+                    </tr>
+                ))
+            }
             </tbody>
         </table>
   )

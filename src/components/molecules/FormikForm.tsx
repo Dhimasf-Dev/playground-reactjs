@@ -1,8 +1,12 @@
 import { useState } from "react"
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-
-
+import Button from "../atomes/button";
+import ShowButton from "../atomes/showBtn";
+import { useSelector, useDispatch } from 'react-redux';
+import { setDataUser } from "../../redux/reducers/userReducer";
+import { useNavigate } from'react-router-dom';
+import axios from "axios";
 interface FormValues {
     name: string;
     email: string;
@@ -11,6 +15,8 @@ interface FormValues {
 
 const FormikForm: React.FC = () => {
     const [isShow, setIsShow] = useState<boolean>(false)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleShow = () => {
         setIsShow(!isShow)
@@ -33,8 +39,11 @@ const FormikForm: React.FC = () => {
         
     });
 
-    const onSubmit = (values: FormValues) => {
-      console.log('Form data', values);
+    const onSubmit = async(values: any) => {
+      const response = await axios.post("http://localhost:5000/dataUser", values)
+      dispatch(setDataUser(values))
+
+      navigate("/user")
     };
 
     return (
@@ -91,21 +100,13 @@ const FormikForm: React.FC = () => {
                                     name="password" 
                                     component="div" 
                                 />
-                                <div 
-                                    className=' absolute top-10 right-3 text-xs cursor-pointer'
-                                    onClick={handleShow}
-                                >
-                                    Show
-                                </div>
+
+                                <ShowButton
+                                    handleShow={handleShow}
+                                />
+                               
                             </div>
-                            <div className='text-center mt-5'>
-                                <button 
-                                    className='bg-white py-2 px-5 rounded-xl' 
-                                    type='submit'
-                                >
-                                    Submit
-                                </button>
-                            </div>
+                            <Button />
                         </div>
                     </Form>
                 )
